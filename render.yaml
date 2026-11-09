@@ -1,0 +1,11 @@
+# Render deploy configuration
+services:
+  - type: web
+    name: secondhand-marketplace
+    env: java
+    plan: free
+    buildCommand: "./mvnw clean package -DskipTests || mvn clean package -DskipTests"
+    startCommand: "java -Dserver.port=$PORT -jar target/secondhand-marketplace-1.0.0.jar"
+    envVars:
+      - key: PORT
+        value: 10000

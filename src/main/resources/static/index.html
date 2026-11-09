@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecondSell - Student Marketplace</title>
+    <meta name="description" content="Buy and sell used items on SecondSell - the premier student marketplace. Find great deals on textbooks, electronics, furniture and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🏷️</span>
+                <span class="brand-name">SecondSell</span>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" id="tab-browse" onclick="showSection('browse')">
+                    🔍 Browse
+                </button>
+                <button class="nav-tab" id="tab-sell" onclick="showSection('sell')">
+                    ➕ Sell Item
+                </button>
+                <button class="nav-tab" id="tab-manage" onclick="showSection('manage')">
+                    📋 Manage
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge">🎓 Student Marketplace</div>
+            <h1 class="hero-title">Buy & Sell<br><span class="gradient-text">Used Items</span></h1>
+            <p class="hero-subtitle">List your pre-loved items, find great deals, and connect with fellow students.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-listings">0</span>
+                    <span class="stat-label">Active Listings</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="total-categories">6</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="total-sold">0</span>
+                    <span class="stat-label">Items Sold</span>
+                </div>
+            </div>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" onclick="showSection('browse')">
+                    Browse Items
+                </button>
+                <button class="btn btn-outline btn-lg" onclick="showSection('sell')">
+                    Sell Something
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-card card-1">
+                <span>📱</span>
+                <div>
+                    <div class="card-title">iPhone 12</div>
+                    <div class="card-price">₹15,000</div>
+                </div>
+            </div>
+            <div class="floating-card card-2">
+                <span>📚</span>
+                <div>
+                    <div class="card-title">Physics Textbook</div>
+                    <div class="card-price">₹350</div>
+                </div>
+            </div>
+            <div class="floating-card card-3">
+                <span>💻</span>
+                <div>
+                    <div class="card-title">Laptop Stand</div>
+                    <div class="card-price">₹800</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse Section -->
+    <section class="section" id="section-browse">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Browse Listings</h2>
+                <p class="section-subtitle">Discover great deals from fellow students</p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="filter-panel glass-card">
+                <div class="filter-row">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" placeholder="Search for items..." class="search-input" oninput="debouncedSearch()">
+                    </div>
+                    <button class="btn btn-primary" onclick="applyFilters()">Search</button>
+                    <button class="btn btn-outline" onclick="clearFilters()">Clear</button>
+                </div>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Category</label>
+                        <select id="filter-category" class="filter-select" onchange="applyFilters()">
+                            <option value="">All Categories</option>
+                            <option value="Electronics">📱 Electronics</option>
+                            <option value="Books">📚 Books</option>
+                            <option value="Furniture">🪑 Furniture</option>
+                            <option value="Clothing">👕 Clothing</option>
+                            <option value="Sports">⚽ Sports</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Condition</label>
+                        <select id="filter-condition" class="filter-select" onchange="applyFilters()">
+                            <option value="">Any Condition</option>
+                            <option value="New">✨ New</option>
+                            <option value="Like New">👌 Like New</option>
+                            <option value="Good">👍 Good</option>
+                            <option value="Fair">🔄 Fair</option>
+                            <option value="Poor">⚠️ Poor</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Min Price (₹)</label>
+                        <input type="number" id="filter-min-price" class="filter-input" placeholder="0" min="0" onchange="applyFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Max Price (₹)</label>
+                        <input type="number" id="filter-max-price" class="filter-input" placeholder="Any" min="0" onchange="applyFilters()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Count -->
+            <div class="results-info">
+                <span id="results-count">Loading...</span>
+            </div>
+
+            <!-- Listings Grid -->
+            <div class="listings-grid" id="listings-grid">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading listings...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell Section -->
+    <section class="section hidden" id="section-sell">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Create a Listing</h2>
+                <p class="section-subtitle">Fill in the details to list your item for sale</p>
+            </div>
+
+            <div class="form-container glass-card">
+                <form id="listing-form" onsubmit="createListing(event)">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label" for="title">Item Title *</label>
+                            <input type="text" id="title" class="form-input" placeholder="e.g. iPhone 12 Pro 128GB" required maxlength="100">
+                            <span class="form-hint">Be specific to attract the right buyers</span>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label" for="description">Description *</label>
+                            <textarea id="description" class="form-textarea" placeholder="Describe the item in detail - include any defects, accessories included, reason for selling..." required maxlength="2000" rows="4"></textarea>
+                            <span class="form-hint" id="desc-count">0/2000 characters</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="category">Category *</label>
+                            <select id="category" class="form-select" required>
+                                <option value="">Select Category</option>
+                                <option value="Electronics">📱 Electronics</option>
+                                <option value="Books">📚 Books</option>
+                                <option value="Furniture">🪑 Furniture</option>
+                                <option value="Clothing">👕 Clothing</option>
+                                <option value="Sports">⚽ Sports</option>
+                                <option value="Other">📦 Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="condition">Condition *</label>
+                            <select id="condition" class="form-select" required>
+                                <option value="">Select Condition</option>
+                                <option value="New">✨ New</option>
+                                <option value="Like New">👌 Like New</option>
+                                <option value="Good">👍 Good</option>
+                                <option value="Fair">🔄 Fair</option>
+                                <option value="Poor">⚠️ Poor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="price">Price (₹) *</label>
+                            <div class="input-with-icon">
+                                <span class="input-prefix">₹</span>
+                                <input type="number" id="price" class="form-input with-prefix" placeholder="0.00" required min="0" step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="seller-name">Your Name *</label>
+                            <input type="text" id="seller-name" class="form-input" placeholder="Full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="seller-email">Your Email *</label>
+                            <input type="email" id="seller-email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="resetForm()">Reset</button>
+                        <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                            <span>🚀 Post Listing</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manage Section -->
+    <section class="section hidden" id="section-manage">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Manage Listings</h2>
+                <p class="section-subtitle">View all listings and mark items as sold</p>
+            </div>
+
+            <div class="manage-grid" id="manage-grid">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading your listings...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Item Detail Modal -->
+    <div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal glass-card" id="item-modal">
+            <button class="modal-close" onclick="closeModalBtn()">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Inquiry Modal -->
+    <div class="modal-overlay hidden" id="inquiry-overlay" onclick="closeInquiryModal(event)">
+        <div class="modal glass-card" id="inquiry-modal">
+            <button class="modal-close" onclick="closeInquiryModalBtn()">✕</button>
+            <div id="inquiry-content"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <span id="toast-icon">✅</span>
+        <span id="toast-message">Success!</span>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
